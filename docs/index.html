@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Refresh Opportunity Scoring for Search Discoverability</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f6f8fb; color: #172033; }
+    main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    h1,h2 { color: #0f274d; }
+    section { background: #fff; border: 1px solid #dce4f1; border-radius: 10px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .kpi { display: inline-block; margin-right: 1rem; padding: .5rem .75rem; background: #eef4ff; border-radius: 8px; }
+    ul { margin-top: .35rem; }
+    code { background: #f0f3f8; padding: .1rem .3rem; border-radius: 4px; }
+    img { max-width: 100%; border: 1px solid #dce4f1; border-radius: 8px; margin: .5rem 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Refresh Opportunity Scoring for Search Discoverability</h1>
+
+  <section>
+    <h2>Abstract</h2>
+    <p>This study asks which pages should be prioritized first for content refresh review. I used the anonymized FlyRank internship starter dataset with 30,000 page-level rows and compared a baseline rule engine against supervised models. The evaluation used the same client-holdout split for both baseline and model. The selected random forest reached Precision@50 of 0.740 versus 0.240 for the baseline, an observed ranking lift on this dataset and split. The output is a ranked queue with reason codes for editorial decision support.</p>
+  </section>
+
+  <section>
+    <h2>Introduction / Problem statement</h2>
+    <p>Teams have limited editorial capacity and need a practical way to decide which pages to refresh first. This project supports that triage decision by ranking pages by decline risk and likely refresh opportunity, then mapping the ranking to clear action categories.</p>
+  </section>
+
+  <section>
+    <h2>Data</h2>
+    <p>Source: <code>data/raw/content_refresh_anonymized.csv</code> (30,000 pseudonymized rows, trailing-90-day metrics). The work excludes client-identifying fields and does not publish private queries, domains, URLs, or credentials. The analysis uses only public-safe aggregate metrics.</p>
+  </section>
+
+  <section>
+    <h2>Methodology</h2>
+    <ul>
+      <li>Lane: Refresh / Content Opportunity Scoring</li>
+      <li>Label: <code>is_declining_label</code> as decline-risk proxy</li>
+      <li>Baseline: transparent rule score with reason codes</li>
+      <li>Models compared: logistic regression, decision tree, random forest</li>
+      <li>Validation design: client-holdout split for model and baseline</li>
+      <li>Leakage controls: <code>trend_direction</code>/<code>trend_pct</code> excluded from features; IDs not used as predictors</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <p><span class="kpi">Baseline Precision@50: <strong>0.240</strong></span><span class="kpi">Model Precision@50: <strong>0.740</strong></span><span class="kpi">Observed lift: <strong>~3.1×</strong></span></p>
+    <p>Model and baseline were evaluated on the same split. The random forest outperformed baseline ranking quality at top-K while maintaining stronger overall discrimination.</p>
+    <img src="../outputs/charts/top_feature_importance.svg" alt="Top feature importance chart" />
+    <img src="../outputs/charts/action_mix.svg" alt="Suggested action mix chart" />
+  </section>
+
+  <section>
+    <h2>Limitations & honest framing</h2>
+    <ul>
+      <li>This is observational analysis and does not prove causal ranking effects.</li>
+      <li>Results are directional and intended for decision support.</li>
+      <li>Recommendations require human review before content changes are published.</li>
+      <li>The starter sample should be extended with full-warehouse replication for broader confidence.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Ranked recommendations</h2>
+    <ol>
+      <li>Prioritize high-confidence pages with <code>refresh_and_review_ctr</code> reason codes.</li>
+      <li>Next, action <code>refresh_and_review_engagement</code> pages where behavior lags.</li>
+      <li>Apply <code>refresh</code> actions for decline-risk pages without severe CTR/engagement conflicts.</li>
+      <li>Keep low-confidence <code>monitor</code> items in watchlist status.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Reproducibility</h2>
+    <p>Notebook and artifacts:</p>
+    <ul>
+      <li><a href="../work/notebooks/capstone.ipynb">work/notebooks/capstone.ipynb</a></li>
+      <li><a href="../outputs/model_report.md">outputs/model_report.md</a></li>
+      <li><a href="../work/capstone_report.md">work/capstone_report.md</a></li>
+      <li>Run command: <code>python scripts/run_all.py</code></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Acknowledgments & data credit</h2>
+    <p>Built on the FlyRank ML Internship dataset — <a href="https://flyrank.ai" target="_blank" rel="noopener">https://flyrank.ai</a>.</p>
+  </section>
+</main>
+</body>
+</html>
