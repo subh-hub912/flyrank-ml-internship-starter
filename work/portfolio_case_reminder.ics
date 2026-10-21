@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//FlyRank AI Internship//Portfolio Compounding//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:flyrank-portfolio-next-case-20261115@internship.flyrank.ai
+DTSTAMP:20261021T093000Z
+DTSTART:20261115T043000Z
+DTEND:20261115T060000Z
+RRULE:FREQ=MONTHLY;BYDAY=3SU
+SUMMARY:[Career Platform] Add Next Case Study: GSC Rank Drift Classifier
+LOCATION:Workspace / Claude Project
+DESCRIPTION:30-minute portfolio compounding session.\n\nProject: Real-Time GSC Rank Drift Classifier\nShape: Week 2 Three-Beat (Problem -> What I Did & Decided -> What Came of It)\nClaude Project prompt:\n"Interview me on my new piece of work using the three-beat shape. Keep my voice card (direct, warm, plain, no buzzwords) and output semantic HTML matching my portfolio CSS."
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Reminder: Tomorrow is portfolio update sprint.
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Start Claude Project interview for new case study.
+END:VALARM
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR
